@@ -446,6 +446,7 @@ export default class HTML extends PureComponent {
             const classStyles = _getElementClassStyles(attribs, classesStyles);
             const textElement = data ?
                 <Text
+                  textBreakStrategy="simple"
                   allowFontScaling={allowFontScaling}
                   style={computeTextStyles(
                       element,
