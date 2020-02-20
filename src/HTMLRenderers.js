@@ -1,6 +1,6 @@
 import React from 'react';
-import { TouchableOpacity, Text, View, Platform } from 'react-native';
-import { WebView } from 'react-native-webview';
+import { TouchableOpacity, Text, View, Platform, WebView } from 'react-native';
+import { WebView as RNWebView } from 'react-native-webview';
 import { _constructStyles, _getElementClassStyles } from './HTMLStyles';
 import HTMLImage from './HTMLImage';
 
@@ -139,8 +139,10 @@ export function iframe (htmlAttribs, children, convertedCSSStyles, passProps) {
 
     const source = htmlAttribs.srcdoc ? { html: htmlAttribs.srcdoc } : { uri: htmlAttribs.src };
 
+    const Web = Platform.OS === 'android' ? RNWebView : WebView
+
     return (
-        <WebView key={passProps.key} source={source} style={style} />
+        <Web key={passProps.key} source={source} style={style} />
     );
 }
 
