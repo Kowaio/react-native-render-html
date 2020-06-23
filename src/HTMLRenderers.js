@@ -142,7 +142,7 @@ export function iframe (htmlAttribs, children, convertedCSSStyles, passProps) {
     const Web = Platform.OS === 'android' ? RNWebView : WebView
 
     return (
-        <Web key={passProps.key} source={source} style={style} />
+        <Web key={passProps.key} source={source} style={style} useWebKit />
     );
 }
 
