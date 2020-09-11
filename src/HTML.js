@@ -48,7 +48,8 @@ export default class HTML extends PureComponent {
         baseFontStyle: PropTypes.object.isRequired,
         textSelectable: PropTypes.bool,
         renderersProps: PropTypes.object,
-        allowFontScaling: PropTypes.bool
+        allowFontScaling: PropTypes.bool,
+        forceDOMUpdate: PropTypes.bool,
     }
 
     static defaultProps = {
@@ -84,18 +85,18 @@ export default class HTML extends PureComponent {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { html, uri, renderers } = prevProps;
+        const { html, uri, renderers, forceDOMUpdate } = prevProps;
         let doParseDOM = false;
 
         this.generateDefaultStyles(this.props.baseFontStyle);
         if (renderers !== this.props.renderers) {
             this.renderers = { ...HTMLRenderers, ...(this.props.renderers || {}) };
         }
-        if (html !== this.props.html || uri !== this.props.uri) {
+        if (html !== this.props.html || uri !== this.props.uri || forceDOMUpdate !== this.props.forceDOMUpdate) {
             // If the source changed, register the new HTML and parse it
             this.registerDOM(this.props);
         }
-        if (this.state.dom !== prevState.dom) {
+        if (this.state.dom !== prevState.dom || this.state.forceDOMUpdate !== prevState.forceDOMUpdate) {
             this.parseDOM(this.state.dom, this.props);
         }
     }
@@ -103,7 +104,7 @@ export default class HTML extends PureComponent {
     async registerDOM (props = this.props, cb) {
         const { html, uri } = props;
         if (html) {
-            this.setState({ dom: html, loadingRemoteURL: false, errorLoadingRemoteURL: false });
+            this.setState({ dom: html, loadingRemoteURL: false, errorLoadingRemoteURL: false, forceDOMUpdate: props.forceDOMUpdate });
         } else if (props.uri) {
             try {
                 // WIP : This should render a loader and html prop should not be set in state
